@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dedal:DedalDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dedal="http://www.dedal.fr/metamodel" name="Generated Diagram">
+  <architectureDescriptions xsi:type="dedal:Configuration" name="SpringModel - http://www.xtext.org/spring/SpringConfigDslConfiguration">
+    <configComponents name="&quot;fr.ema.examples.has.config.AdjustableLamp&quot;"
+        id="_b_4PEGByEemLVLU7xrrk4w"/>
+    <configComponents name="&quot;fr.ema.examples.has.config.Clock&quot;" id="_b_42IGByEemLVLU7xrrk4w"/>
+    <configComponents name="&quot;fr.ema.examples.has.config.Orchestrator&quot;" id="_b_42IWByEemLVLU7xrrk4w"/>
+    <configConnections refID="_b_42ImByEemLVLU7xrrk4w" property="&quot;lights&quot;"
+        clientClassElem="#_b_42IWByEemLVLU7xrrk4w" serverClassElem="#_b_4PEGByEemLVLU7xrrk4w"/>
+    <configConnections refID="_b_5dMGByEemLVLU7xrrk4w" property="&quot;clock&quot;"
+        clientClassElem="#_b_42IWByEemLVLU7xrrk4w" serverClassElem="#_b_42IGByEemLVLU7xrrk4w"/>
+  </architectureDescriptions>
+  <architectureDescriptions xsi:type="dedal:Assembly" name="SpringModel - http://www.xtext.org/spring/SpringConfigDslAssembly">
+    <assmComponents name="&quot;lampDesk&quot;" id="_b_5dMWByEemLVLU7xrrk4w" instantiates="#_b_4PEGByEemLVLU7xrrk4w"/>
+    <assmComponents name="&quot;lampSitting&quot;" id="_b_5dMmByEemLVLU7xrrk4w" instantiates="#_b_4PEGByEemLVLU7xrrk4w"/>
+    <assmComponents name="&quot;clock1&quot;" id="_b_5dM2ByEemLVLU7xrrk4w" instantiates="#_b_42IGByEemLVLU7xrrk4w"/>
+    <assmComponents name="&quot;orchestrator1&quot;" id="_b_5dNGByEemLVLU7xrrk4w"
+        instantiates="#_b_42IWByEemLVLU7xrrk4w"/>
+    <assemblyConnections refID="_b_5dNWByEemLVLU7xrrk4w" property="set:orchestrator1.lights"
+        clientInstElem="#_b_5dNGByEemLVLU7xrrk4w" serverInstElem="#_b_5dMWByEemLVLU7xrrk4w"/>
+    <assemblyConnections refID="_vAGmAGDmEemLVLU7xrrk4w" property="set:orchestrator1.lights"
+        clientInstElem="#_b_5dNGByEemLVLU7xrrk4w" serverInstElem="#_b_5dMmByEemLVLU7xrrk4w"/>
+  </architectureDescriptions>
+</dedal:DedalDiagram>

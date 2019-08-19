@@ -22,8 +22,8 @@ public class Main {
 			ProjectComparator projectComparator = new ProjectComparator();
 			try {
 				projectComparator.loadResources(
-						rows.get(i-1)[2],
-						rows.get(i)[2],
+						rows.get(i-1)[1],
+						rows.get(i)[1],
 						pathToDirectoryForJsonFiles
 						);
 			} catch (IOException e) {

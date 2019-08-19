@@ -12,9 +12,31 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		String pathToCsvFile = args[0];
+		String pathToDirectoryForJsonFiles = args[1];
+		
 		CSVReader csvReader = new CSVReader();
-		List<String[]> rows = csvReader.readCsv("/home/quentin/broadleaf-versions/csvtest.csv");
-	//ProjectComparator projectComparator = new ProjectComparator();
+		List<String[]> rows = csvReader.readCsv(pathToCsvFile);//"/home/quentin/broadleaf-versions/csvtest.csv");
+		
+		for (int i = 2; i < rows.size(); i++) {
+			ProjectComparator projectComparator = new ProjectComparator();
+			try {
+				projectComparator.loadResources(
+						rows.get(i-1)[2],
+						rows.get(i)[2],
+						pathToDirectoryForJsonFiles
+						);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			projectComparator.createDifferences();
+			projectComparator = null;
+			JavaParserFacade.clearInstances();
+		}
+		
+		
+		//ProjectComparator projectComparator = new ProjectComparator();
 //		String path = "/home/quentin/broadleaf-versions/broadleaf-5.0.0-RC1";
 //		try {
 //			projectComparator.loadResources(
@@ -28,24 +50,6 @@ public class Main {
 //			e.printStackTrace();
 //		}
 //		projectComparator.createDifferences();
-
-		
-		for (int i = 2; i < rows.size(); i++) {
-			ProjectComparator projectComparator = new ProjectComparator();
-			try {
-				projectComparator.loadResources(
-						"/home/quentin/broadleaf-versions/" + rows.get(i-1)[1],
-						"/home/quentin/broadleaf-versions/" + rows.get(i)[1],
-						"/home/quentin/broadleaf-versions/"
-						);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			projectComparator.createDifferences();
-			projectComparator = null;
-			JavaParserFacade.clearInstances();
-		}
 	}
 
 }

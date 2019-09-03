@@ -242,4 +242,7 @@ public class ProjectComparator {
 		}
 	}
 	
+	public void initHierarchyBuilder() {
+		hierarchyBuilderManager.init();
+	}
 }

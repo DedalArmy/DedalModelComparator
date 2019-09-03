@@ -81,6 +81,8 @@ public class Main {
 			} catch (Exception e) {
 				gapVersions++;
 				loadRessourcesAndCreateDiff(gapVersions, rows, pathToDirectoryForJsonFiles);
+				projectComparator = null;
+				JavaParserFacade.clearInstances();
 			}
 			projectComparator = null;
 			JavaParserFacade.clearInstances();

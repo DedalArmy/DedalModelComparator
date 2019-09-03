@@ -12,10 +12,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		
-		//String pathToCsvFile = args[0];
-		//String pathToDirectoryForJsonFiles = args[1];
-		String pathToCsvFile = "/home/quentin/git/DedalModelComparator/modelLoad/versions_adl_test.csv";
-		String pathToDirectoryForJsonFiles = "/home/quentin/broadleaf-versions/";
+		String pathToCsvFile = args[0];
+		String pathToDirectoryForJsonFiles = args[1];
 		
 		CSVReader csvReader = new CSVReader();
 		List<String[]> rows = csvReader.readCsv(pathToCsvFile);//"/home/quentin/broadleaf-versions/csvtest.csv");

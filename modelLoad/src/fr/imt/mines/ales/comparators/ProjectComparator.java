@@ -40,6 +40,7 @@ import fr.imt.mines.ales.component.cinterface.InterfaceSubstitualibityChecker;
 import fr.imt.mines.ales.component.interfacetype.InterfaceTypeDirectionSubstitualibityChecker;
 import fr.imt.mines.ales.component.parameter.ParameterSubstitualibityChecker;
 import fr.imt.mines.ales.component.signature.SignatureSubstitualibityChecker;
+import fr.imt.mines.ales.utils.DiffObjectJson;
 import fr.imt.mines.ales.utils.FileUtil;
 import fr.imt.mines.ales.utils.JsonWriterSingleton;
 import fr.imt.mines.ales.utils.MapPathKeys;
@@ -196,9 +197,14 @@ public class ProjectComparator {
 		if(eObject instanceof Interface) {
 			Interface interfaceObject = (Interface)eObject;
 			try {
-				jsonWriterSingleton.addDiffToJsonArray(
-						mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind)
-						.toJsonObject());
+//				DiffObjectJson diffObjectJson = jsonWriterSingleton.addDiffToJsonArray(
+//						mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind)
+//						.toJsonObject());
+
+				DiffObjectJson diffObjectJson = mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind);
+				if (diffObjectJson != null) {
+					jsonWriterSingleton.addDiffToJsonArray(diffObjectJson.toJsonObject());
+				}
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

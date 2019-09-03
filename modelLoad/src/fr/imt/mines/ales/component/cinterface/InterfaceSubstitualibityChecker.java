@@ -5,6 +5,7 @@ import org.eclipse.emf.compare.DifferenceKind;
 import org.eclipse.emf.compare.ReferenceChange;
 import org.eclipse.emf.ecore.EObject;
 
+import dedal.Connection;
 import dedal.DIRECTION;
 import dedal.Interface;
 import dedal.InterfaceType;
@@ -45,71 +46,79 @@ public class InterfaceSubstitualibityChecker extends Checker4DedalInterface {
 				return diffObjectJson;
 			}
 			if(differenceKind == DifferenceKind.CHANGE) {
-				InterfaceType interfaceTypeRight = ((Interface)diffObject.getMatch().getRight()).getType();
-				InterfaceType interfaceTypeLeft = ((Interface)diffObject.getMatch().getLeft()).getType();
-				
-				JavaType jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(interfaceTypeRight.getName().substring(interfaceTypeRight.getName().indexOf("I")+1));
-				JavaType jTypeParamOldClass = getHierarchyBuilderOld().findJavaType(interfaceTypeLeft.getName().substring(interfaceTypeLeft.getName().indexOf("I")+1));
 
-				if(jTypeParamNewClass.isSubtypeOf(jTypeParamOldClass)) {
-					diffObjectJson.setSusbstituability(true);
-				}else if(jTypeParamOldClass.isSubtypeOf(jTypeParamNewClass)){
-					diffObjectJson.setSusbstituability(false);
-					diffObjectJson.getViolatedRules().put("INew >= IOld");
-				}else {
-					String nameInterfaceTypeRight = interfaceTypeRight.getName();
-					String nameInterfaceTypeLeft  = interfaceTypeLeft.getName();
+				try {
+					InterfaceType interfaceTypeRight = ((Interface)diffObject.getMatch().getRight()).getType();
+					InterfaceType interfaceTypeLeft = ((Interface)diffObject.getMatch().getLeft()).getType();
 					
-					if(nameInterfaceTypeLeft == nameInterfaceTypeRight) {
-						for(Diff diff : diffObject.getRequires()) {
-							ReferenceChange refChange = (ReferenceChange)diff;
-							EObject eObject = refChange.getValue();
-							if(eObject instanceof Interface) {
-								Interface interfaceRequired = (Interface)eObject;
-								DiffObjectJson diffObjectJsonRequire = this.check(diff, interfaceRequired.getDirection(), diff.getKind());
-								if(!diffObjectJsonRequire.getSusbstituability()) {
-									diffObjectJson.setSusbstituability(false);
-									diffObjectJson.getViolatedRules().put("INew || IOld");
-									return diffObjectJson;
-								}
-							}
-							
-							if(eObject instanceof Interface) {
-								DiffObjectJson diffObjectJsonRequire = new InterfaceTypeDirectionSubstitualibityChecker(this.getHierarchyBuilderOld(), this.getHierarchyBuilderNew()) .check(diff, direction, diff.getKind());
-								if(!diffObjectJsonRequire.getSusbstituability()) {
-									diffObjectJson.setSusbstituability(false);
-									diffObjectJson.getViolatedRules().put("INew || IOld");
-									return diffObjectJson;
-								}
-							}
-							
-							if(eObject instanceof Signature) {
-								DiffObjectJson diffObjectJsonRequire = new SignatureSubstitualibityChecker(this.getHierarchyBuilderOld(), this.getHierarchyBuilderNew()).check(diff, diff.getKind());
-								if(!diffObjectJsonRequire.getSusbstituability()) {
-									diffObjectJson.setSusbstituability(false);
-									diffObjectJson.getViolatedRules().put("INew || IOld");
-									return diffObjectJson;
-								}
-							}
-							
-							if(eObject instanceof Parameter) {
-								DiffObjectJson diffObjectJsonRequire = new ParameterSubstitualibityChecker(this.getHierarchyBuilderOld(), this.getHierarchyBuilderNew()).check(diff, diff.getKind());
-								if(!diffObjectJsonRequire.getSusbstituability()) {
-									diffObjectJson.setSusbstituability(false);
-									diffObjectJson.getViolatedRules().put("INew || IOld");
-									return diffObjectJson;
-								}
-							}
-							
-						}
-						diffObjectJson.setSusbstituability(true);
-						return diffObjectJson;
+									
+					JavaType jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(interfaceTypeRight.getName().substring(interfaceTypeRight.getName().indexOf("I")+1));
+					JavaType jTypeParamOldClass = getHierarchyBuilderOld().findJavaType(interfaceTypeLeft.getName().substring(interfaceTypeLeft.getName().indexOf("I")+1));
 
+					if(jTypeParamNewClass.isSubtypeOf(jTypeParamOldClass)) {
+						diffObjectJson.setSusbstituability(true);
+					}else if(jTypeParamOldClass.isSubtypeOf(jTypeParamNewClass)){
+						diffObjectJson.setSusbstituability(false);
+						diffObjectJson.getViolatedRules().put("INew >= IOld");
+					}else {
+						String nameInterfaceTypeRight = interfaceTypeRight.getName();
+						String nameInterfaceTypeLeft  = interfaceTypeLeft.getName();
+						
+						if(nameInterfaceTypeLeft == nameInterfaceTypeRight) {
+							for(Diff diff : diffObject.getRequires()) {
+								ReferenceChange refChange = (ReferenceChange)diff;
+								EObject eObject = refChange.getValue();
+								if(eObject instanceof Interface) {
+									Interface interfaceRequired = (Interface)eObject;
+									DiffObjectJson diffObjectJsonRequire = this.check(diff, interfaceRequired.getDirection(), diff.getKind());
+									if(!diffObjectJsonRequire.getSusbstituability()) {
+										diffObjectJson.setSusbstituability(false);
+										diffObjectJson.getViolatedRules().put("INew || IOld");
+										return diffObjectJson;
+									}
+								}
+								
+								if(eObject instanceof Interface) {
+									DiffObjectJson diffObjectJsonRequire = new InterfaceTypeDirectionSubstitualibityChecker(this.getHierarchyBuilderOld(), this.getHierarchyBuilderNew()) .check(diff, direction, diff.getKind());
+									if(!diffObjectJsonRequire.getSusbstituability()) {
+										diffObjectJson.setSusbstituability(false);
+										diffObjectJson.getViolatedRules().put("INew || IOld");
+										return diffObjectJson;
+									}
+								}
+								
+								if(eObject instanceof Signature) {
+									DiffObjectJson diffObjectJsonRequire = new SignatureSubstitualibityChecker(this.getHierarchyBuilderOld(), this.getHierarchyBuilderNew()).check(diff, diff.getKind());
+									if(!diffObjectJsonRequire.getSusbstituability()) {
+										diffObjectJson.setSusbstituability(false);
+										diffObjectJson.getViolatedRules().put("INew || IOld");
+										return diffObjectJson;
+									}
+								}
+								
+								if(eObject instanceof Parameter) {
+									DiffObjectJson diffObjectJsonRequire = new ParameterSubstitualibityChecker(this.getHierarchyBuilderOld(), this.getHierarchyBuilderNew()).check(diff, diff.getKind());
+									if(!diffObjectJsonRequire.getSusbstituability()) {
+										diffObjectJson.setSusbstituability(false);
+										diffObjectJson.getViolatedRules().put("INew || IOld");
+										return diffObjectJson;
+									}
+								}
+								
+							}
+							diffObjectJson.setSusbstituability(true);
+							return diffObjectJson;
+
+						}
+						diffObjectJson.setSusbstituability(false);
+						diffObjectJson.getViolatedRules().put("INew || IOld");
+						return diffObjectJson;				
 					}
-					diffObjectJson.setSusbstituability(false);
-					diffObjectJson.getViolatedRules().put("INew || IOld");
-					return diffObjectJson;				
+				} catch (ClassCastException e) {
+					System.out.println(e.getMessage());
+					System.out.println("=====> ERROR INTERFACE !!!!!!!!!!!!!!!!");
 				}
+				
 			}
 		}
 		

@@ -18,7 +18,7 @@ public class Main {
 		CSVReader csvReader = new CSVReader();
 		List<String[]> rows = csvReader.readCsv(pathToCsvFile);//"/home/quentin/broadleaf-versions/csvtest.csv");
 		int gapVersions = 0;
-		
+		boolean error = false;
 		loadRessourcesAndCreateDiff(gapVersions, rows, pathToDirectoryForJsonFiles);
 		
 //		for (int i = 2; i < rows.size(); i++) {
@@ -68,16 +68,17 @@ public class Main {
 	
 	public static void loadRessourcesAndCreateDiff(int gapVersions, List<String[]> rows, String pathToDirectoryForJsonFiles) {
 		
-		for (int i = 2; i+gapVersions < rows.size(); i++) {
+		for (int i = 2; i < rows.size() && i+gapVersions < rows.size(); i++) {
 			ProjectComparator projectComparator = new ProjectComparator();
 			try {
 				projectComparator.loadResources(
-						rows.get(i+gapVersions-1)[1],
+						rows.get(i-1)[1],
 						rows.get(i+gapVersions)[1],
 						pathToDirectoryForJsonFiles
 						);
 				projectComparator.createDifferences();
-
+				i+= gapVersions;
+				gapVersions = 0;
 			} catch (Exception e) {
 				gapVersions++;
 				projectComparator.initHierarchyBuilder();

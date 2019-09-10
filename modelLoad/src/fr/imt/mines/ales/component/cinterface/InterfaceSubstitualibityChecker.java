@@ -28,11 +28,11 @@ public class InterfaceSubstitualibityChecker extends Checker4DedalInterface {
 	public DiffObjectJson check(Diff diffObject, DIRECTION direction, DifferenceKind differenceKind) throws ClassNotFoundException {
 	
 		ReferenceChange referenceChange = (ReferenceChange)diffObject;
-		Interface intefaceObject = (Interface)referenceChange.getValue();
+		Interface interfaceObject = (Interface)referenceChange.getValue();
 		
 		DiffObjectJson diffObjectJson = new DiffObjectJson();
 		diffObjectJson.setDifferenceKind(differenceKind.getName());
-		diffObjectJson.setDedalElementId(intefaceObject.getName() + " " + direction);
+		diffObjectJson.setDedalElementId(interfaceObject.getName() + " " + direction + " " + interfaceObject.eContainer().getClass().getName());
 		diffObjectJson.setDedalType(referenceChange);
 		
 		if(direction == DIRECTION.PROVIDED) {

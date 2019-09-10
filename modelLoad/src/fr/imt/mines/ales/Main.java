@@ -85,7 +85,7 @@ public class Main {
 				projectComparator = null;
 				JavaParserFacade.clearInstances();
 				loadRessourcesAndCreateDiff(gapVersions, rows, pathToDirectoryForJsonFiles);
-
+				System.out.println("Global error : " + e.getMessage());
 			}
 			projectComparator.initHierarchyBuilder();
 			projectComparator = null;

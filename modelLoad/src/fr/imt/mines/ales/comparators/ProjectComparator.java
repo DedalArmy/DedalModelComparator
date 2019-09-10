@@ -25,6 +25,7 @@ import dedal.CompClass;
 import dedal.CompInstance;
 import dedal.CompRole;
 import dedal.Component;
+import dedal.Connection;
 import dedal.DedalPackage;
 import dedal.Interface;
 import dedal.InterfaceType;
@@ -33,6 +34,7 @@ import dedal.Signature;
 import fr.imt.ales.redoc.type.hierarchy.build.HierarchyBuilder;
 import fr.imt.ales.redoc.type.hierarchy.build.HierarchyBuilderManager;
 import fr.imt.mines.ales.architecture.level.ComponentSubstitualibityChecker;
+import fr.imt.mines.ales.architecture.level.ConnectionSubstituabilityChecker;
 import fr.imt.mines.ales.component.Checker4DedalInterface;
 import fr.imt.mines.ales.component.CheckerNot4DedalInterface;
 import fr.imt.mines.ales.component.attribute.AttributeSubstuabilityChecker;
@@ -110,6 +112,7 @@ public class ProjectComparator {
 		mapCheckerNot4Interface.put(Parameter.class, new ParameterSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		mapCheckerNot4Interface.put(Attribute.class, new AttributeSubstuabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		mapCheckerNot4Interface.put(Component.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(Connection.class, new ConnectionSubstituabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		
 		mapChecker4Interface.put(Interface.class, new InterfaceSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		mapChecker4Interface.put(InterfaceType.class, new InterfaceTypeDirectionSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
@@ -193,6 +196,14 @@ public class ProjectComparator {
 
 		}
 		
+		if(eObject instanceof Connection) {
+			try {
+				jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Connection.class).check(diff, differenceKind).toJsonObject());
+			} catch (JSONException | ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	
 		if(eObject instanceof Interface) {
 			Interface interfaceObject = (Interface)eObject;

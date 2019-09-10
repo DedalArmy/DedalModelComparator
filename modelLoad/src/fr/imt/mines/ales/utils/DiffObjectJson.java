@@ -11,6 +11,8 @@ public class DiffObjectJson {
 	private String dedalElementId;
 	private JSONArray violatedRules;
 	private Boolean susbstituability;
+	private String parent;
+	private String parentType;
 	
 	public DiffObjectJson(			
 			String differenceKind,

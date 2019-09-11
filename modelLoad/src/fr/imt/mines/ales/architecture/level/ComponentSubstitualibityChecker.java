@@ -32,13 +32,13 @@ public class ComponentSubstitualibityChecker extends CheckerNot4DedalInterface {
 		diffObjectJson.setDedalElementId(componentObject.getId());
 		diffObjectJson.setDedalType(referenceChange);
 		
-		if(componentObject.eContainer() instanceof Assembly || componentObject.eContainer() instanceof Configuration || componentObject.eContainer() instanceof Specification) {
+		if(componentObject.eContainer() != null && componentObject.eContainer() instanceof Assembly || componentObject.eContainer() instanceof Configuration || componentObject.eContainer() instanceof Specification) {
 			diffObjectJson.setParent(((Component)componentObject.eContainer()).getName());
+			diffObjectJson.setParentType(componentObject.eContainer().getClass().getName());
 		}else {
 			diffObjectJson.setParent("ERROR PARENT NOT AN ARCHITECTURE DESCRIPTION");
 		}
-		diffObjectJson.setParentType(componentObject.eContainer().getClass().getName());
-		
+
 		if(differenceKind == DifferenceKind.DELETE) {
 			diffObjectJson.setSusbstituability(false);
 			diffObjectJson.getViolatedRules().put("C_Delete");

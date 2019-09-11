@@ -36,12 +36,12 @@ public class InterfaceSubstitualibityChecker extends Checker4DedalInterface {
 		diffObjectJson.setDedalElementId(interfaceObject.getName() + " " + direction + " " + interfaceObject.eContainer().getClass().getName());
 		diffObjectJson.setDedalType(referenceChange);
 
-		if(interfaceObject.eContainer() instanceof Component) {
+		if(interfaceObject.eContainer() != null && interfaceObject.eContainer() instanceof Component) {
 			diffObjectJson.setParent(((Component)interfaceObject.eContainer()).getName());
+			diffObjectJson.setParentType(interfaceObject.eContainer().getClass().getName());
 		}else {
 			diffObjectJson.setParent("ERROR PARENT NOT A COMPONENT");
 		}
-		diffObjectJson.setParentType(interfaceObject.eContainer().getClass().getName());
 
 		
 		if(direction == DIRECTION.PROVIDED) {

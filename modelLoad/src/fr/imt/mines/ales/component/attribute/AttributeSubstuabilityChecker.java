@@ -26,12 +26,12 @@ public class AttributeSubstuabilityChecker extends CheckerNot4DedalInterface {
 		diffObjectJson.setDedalElementId(attributeObject.toString());
 		diffObjectJson.setDedalType(referenceChange);
 		
-		if(attributeObject.eContainer() instanceof Component) {
+		if(attributeObject.eContainer() != null && attributeObject.eContainer() instanceof Component) {
 			diffObjectJson.setParent(((Component)attributeObject.eContainer()).getName());
+			diffObjectJson.setParentType(attributeObject.eContainer().getClass().getName());
 		}else {
 			diffObjectJson.setParent("ERROR PARENT NOT A COMPONENT");
 		}
-		diffObjectJson.setParentType(attributeObject.eContainer().getClass().getName());
 		
 		if(differenceKind == DifferenceKind.DELETE) {
 			diffObjectJson.setSusbstituability(false);

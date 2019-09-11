@@ -162,9 +162,12 @@ public class ProjectComparator {
 			}
 
 		});
+		System.out.println("Wrinting JSON.....");
 
 		jsonWriterSingleton.writeJson(directoryToStoreJsonFiles + 
 				mapPathsOldProject.get(MapPathKeys.PROJECT_NAME) + "---" + mapPathsNewProject.get(MapPathKeys.PROJECT_NAME) + ".json");
+		
+		System.out.println("Wrinting JSON OK");
 	
 		hierarchyBuilderManager.init();
 	}

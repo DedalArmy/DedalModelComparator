@@ -5,6 +5,7 @@ import org.eclipse.emf.compare.DifferenceKind;
 import org.eclipse.emf.compare.ReferenceChange;
 
 import dedal.Attribute;
+import dedal.Component;
 import fr.imt.ales.redoc.type.hierarchy.build.HierarchyBuilder;
 import fr.imt.ales.redoc.type.hierarchy.structure.JavaType;
 import fr.imt.mines.ales.component.CheckerNot4DedalInterface;
@@ -24,6 +25,13 @@ public class AttributeSubstuabilityChecker extends CheckerNot4DedalInterface {
 		diffObjectJson.setDifferenceKind(differenceKind.getName());
 		diffObjectJson.setDedalElementId(attributeObject.toString());
 		diffObjectJson.setDedalType(referenceChange);
+		
+		if(attributeObject.eContainer() instanceof Component) {
+			diffObjectJson.setParent(((Component)attributeObject.eContainer()).getName());
+		}else {
+			diffObjectJson.setParent("ERROR PARENT NOT A COMPONENT");
+		}
+		diffObjectJson.setParentType(attributeObject.eContainer().getClass().getName());
 		
 		if(differenceKind == DifferenceKind.DELETE) {
 			diffObjectJson.setSusbstituability(false);

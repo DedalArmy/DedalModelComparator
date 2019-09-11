@@ -5,6 +5,7 @@ import org.eclipse.emf.compare.DifferenceKind;
 import org.eclipse.emf.compare.ReferenceChange;
 import org.eclipse.emf.ecore.EObject;
 
+import dedal.Component;
 import dedal.Connection;
 import dedal.DIRECTION;
 import dedal.Interface;
@@ -34,6 +35,14 @@ public class InterfaceSubstitualibityChecker extends Checker4DedalInterface {
 		diffObjectJson.setDifferenceKind(differenceKind.getName());
 		diffObjectJson.setDedalElementId(interfaceObject.getName() + " " + direction + " " + interfaceObject.eContainer().getClass().getName());
 		diffObjectJson.setDedalType(referenceChange);
+
+		if(interfaceObject.eContainer() instanceof Component) {
+			diffObjectJson.setParent(((Component)interfaceObject.eContainer()).getName());
+		}else {
+			diffObjectJson.setParent("ERROR PARENT NOT A COMPONENT");
+		}
+		diffObjectJson.setParentType(interfaceObject.eContainer().getClass().getName());
+
 		
 		if(direction == DIRECTION.PROVIDED) {
 			if(differenceKind == DifferenceKind.ADD) {

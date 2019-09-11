@@ -5,10 +5,13 @@ import org.eclipse.emf.compare.DifferenceKind;
 import org.eclipse.emf.compare.ReferenceChange;
 import org.eclipse.emf.ecore.EObject;
 
+import dedal.Assembly;
 import dedal.CompClass;
 import dedal.CompInstance;
 import dedal.CompRole;
 import dedal.Component;
+import dedal.Configuration;
+import dedal.Specification;
 import fr.imt.ales.redoc.type.hierarchy.build.HierarchyBuilder;
 import fr.imt.ales.redoc.type.hierarchy.structure.JavaType;
 import fr.imt.mines.ales.component.CheckerNot4DedalInterface;
@@ -28,6 +31,13 @@ public class ComponentSubstitualibityChecker extends CheckerNot4DedalInterface {
 		diffObjectJson.setDifferenceKind(differenceKind.getName());
 		diffObjectJson.setDedalElementId(componentObject.getId());
 		diffObjectJson.setDedalType(referenceChange);
+		
+		if(componentObject.eContainer() instanceof Assembly || componentObject.eContainer() instanceof Configuration || componentObject.eContainer() instanceof Specification) {
+			diffObjectJson.setParent(((Component)componentObject.eContainer()).getName());
+		}else {
+			diffObjectJson.setParent("ERROR PARENT NOT AN ARCHITECTURE DESCRIPTION");
+		}
+		diffObjectJson.setParentType(componentObject.eContainer().getClass().getName());
 		
 		if(differenceKind == DifferenceKind.DELETE) {
 			diffObjectJson.setSusbstituability(false);

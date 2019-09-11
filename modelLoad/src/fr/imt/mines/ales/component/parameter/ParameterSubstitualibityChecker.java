@@ -1,5 +1,6 @@
 package fr.imt.mines.ales.component.parameter;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.compare.Diff;
 import org.eclipse.emf.compare.DifferenceKind;
 import org.eclipse.emf.compare.ReferenceChange;
@@ -19,6 +20,7 @@ public class ParameterSubstitualibityChecker extends CheckerNot4DedalInterface{
 		
 		ReferenceChange referenceChange = (ReferenceChange)diffObject;
 		Parameter parameterObject = (Parameter)referenceChange.getValue();
+
 		
 		DiffObjectJson diffObjectJson = new DiffObjectJson();
 		diffObjectJson.setDifferenceKind(differenceKind.getName());

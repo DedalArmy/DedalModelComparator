@@ -211,7 +211,6 @@ public class ProjectComparator {
 //				DiffObjectJson diffObjectJson = jsonWriterSingleton.addDiffToJsonArray(
 //						mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind)
 //						.toJsonObject());
-
 				DiffObjectJson diffObjectJson = mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind);
 				if (diffObjectJson != null) {
 					jsonWriterSingleton.addDiffToJsonArray(diffObjectJson.toJsonObject());

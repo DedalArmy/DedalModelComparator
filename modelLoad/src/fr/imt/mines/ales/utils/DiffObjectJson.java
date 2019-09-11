@@ -19,12 +19,16 @@ public class DiffObjectJson {
 			String dedalType,
 			String dedalElementName,
 			JSONArray violatedRulesArrayList,
-			Boolean susbstituability) {
+			Boolean susbstituability, 
+			String parent,
+			String parentType) {
 		this.differenceKind = differenceKind;
 		this.dedalType = dedalType;
 		this.dedalElementId = dedalElementName;
 		this.violatedRules = violatedRulesArrayList;
 		this.susbstituability = susbstituability;
+		this.parent = parent;
+		this.parentType = parentType;
 	}
 	
 	public DiffObjectJson() {
@@ -38,6 +42,8 @@ public class DiffObjectJson {
 		jsonObjectDiff.put("dedalElementId", dedalElementId);
 		jsonObjectDiff.put("susbstituability", susbstituability);
 		jsonObjectDiff.put("violatedRules", violatedRules);
+		jsonObjectDiff.put("parent", parent);
+		jsonObjectDiff.put("parentType", parentType);
 		return jsonObjectDiff;
 	}
 
@@ -89,5 +95,19 @@ public class DiffObjectJson {
 		this.susbstituability = susbstituability;
 	}
 
-	
+	public String getParent() {
+		return parent;
+	}
+
+	public void setParent(String parent) {
+		this.parent = parent;
+	}
+
+	public String getParentType() {
+		return parentType;
+	}
+
+	public void setParentType(String parentType) {
+		this.parentType = parentType;
+	}
 }

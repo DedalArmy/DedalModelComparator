@@ -81,6 +81,7 @@ public class Main {
 				projectComparator.createDifferences();
 				i+= gapVersions;
 				gapVersions = 0;
+
 			} catch (Exception e) {
 				gapVersions++;
 				projectComparator.initHierarchyBuilder();

@@ -68,7 +68,7 @@ public class InterfaceSubstitualibityChecker extends Checker4DedalInterface {
 			if(differenceKind == DifferenceKind.CHANGE) {
 
 				try {
-					if(diffObject.getMatch().getRight() instanceof Interface && diffObject.getMatch().getRight() instanceof Interface){
+					if(diffObject.getMatch().getRight() instanceof Interface && diffObject.getMatch().getLeft() instanceof Interface){
 
 					InterfaceType interfaceTypeRight = ((Interface)diffObject.getMatch().getRight()).getType();
 					InterfaceType interfaceTypeLeft = ((Interface)diffObject.getMatch().getLeft()).getType();
@@ -155,12 +155,13 @@ public class InterfaceSubstitualibityChecker extends Checker4DedalInterface {
 							return listDiffObjectJson;				
 						}
 					}
-					if(diffObject.getMatch().getRight() instanceof Connection && diffObject.getMatch().getRight() instanceof Connection) {
+					if(diffObject.getMatch().getRight() instanceof Connection && diffObject.getMatch().getLeft() instanceof Connection) {
 						listDiffObjectJson.add(connectionSubstituabilityChecker.check(diffObject, differenceKind));
 						return listDiffObjectJson;
 					}
 			} catch (ClassCastException e) {
 				System.out.println(e.getMessage());
+				e.printStackTrace();
 				System.out.println("=====> ERROR INTERFACE !!!!!!!!!!!!!!!!");
 			}
 				

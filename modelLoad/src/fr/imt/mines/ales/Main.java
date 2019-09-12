@@ -10,13 +10,14 @@ import fr.imt.mines.ales.utils.CSVReader;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		String pathToCsvFile = args[0];
 		String pathToDirectoryForJsonFiles = args[1];
 		
 		CSVReader csvReader = new CSVReader();
 		List<String[]> rows = csvReader.readCsv(pathToCsvFile);//"/home/quentin/broadleaf-versions/csvtest.csv");
+		//List<String[]> rows = csvReader.readCsv("/home/quentin/broadleaf-versions/versions_adl_2.csv");
 		int gapVersions = 0;
 		boolean error = false;
 		loadRessourcesAndCreateDiff(gapVersions, rows, pathToDirectoryForJsonFiles);
@@ -66,10 +67,11 @@ public class Main {
 //		projectComparator.createDifferences();
 	}
 	
-	public static void loadRessourcesAndCreateDiff(int gapVersions, List<String[]> rows, String pathToDirectoryForJsonFiles) {
+	public static void loadRessourcesAndCreateDiff(int gapVersions, List<String[]> rows, String pathToDirectoryForJsonFiles) throws IOException {
 		
 		for (int i = 2; i < rows.size() && i+gapVersions < rows.size(); i++) {
 			ProjectComparator projectComparator = new ProjectComparator();
+			projectComparator.initHierarchyBuilder();
 			try {
 				projectComparator.loadResources(
 						rows.get(i-1)[1],
@@ -87,7 +89,6 @@ public class Main {
 				loadRessourcesAndCreateDiff(gapVersions, rows, pathToDirectoryForJsonFiles);
 				System.out.println("Global error : " + e.getMessage());
 			}
-			projectComparator.initHierarchyBuilder();
 			projectComparator = null;
 			JavaParserFacade.clearInstances();
 		}

@@ -2,6 +2,7 @@ package fr.imt.mines.ales.comparators;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -115,7 +116,6 @@ public class ProjectComparator {
 		mapCheckerNot4Interface.put(Connection.class, new ConnectionSubstituabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		
 		mapChecker4Interface.put(Interface.class, new InterfaceSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
-		mapChecker4Interface.put(InterfaceType.class, new InterfaceTypeDirectionSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		//---------------------------------------------
 		
 		System.out.println("Loading hierarchy builders OK");
@@ -214,10 +214,16 @@ public class ProjectComparator {
 //				DiffObjectJson diffObjectJson = jsonWriterSingleton.addDiffToJsonArray(
 //						mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind)
 //						.toJsonObject());
-				DiffObjectJson diffObjectJson = mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind);
-				if (diffObjectJson != null) {
-					jsonWriterSingleton.addDiffToJsonArray(diffObjectJson.toJsonObject());
+				//DiffObjectJson diffObjectJson = mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind);
+				List<DiffObjectJson> listDiffObjectJson = mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind);
+				
+				for(DiffObjectJson diffObjectJson : listDiffObjectJson) {
+					if (diffObjectJson != null) {
+						jsonWriterSingleton.addDiffToJsonArray(diffObjectJson.toJsonObject());
+					}
 				}
+				
+
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

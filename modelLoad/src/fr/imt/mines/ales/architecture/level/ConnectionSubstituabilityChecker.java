@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EObject;
 
 import dedal.CompClass;
 import dedal.CompInstance;
-import dedal.CompRole;
 import dedal.Component;
 import dedal.Connection;
 import dedal.DIRECTION;

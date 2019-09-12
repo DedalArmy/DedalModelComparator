@@ -1,0 +1,1 @@
+package fr.imt.mines.ales.structure.impl.diffassembly;

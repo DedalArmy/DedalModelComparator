@@ -43,6 +43,7 @@ import fr.imt.mines.ales.component.cinterface.InterfaceSubstitualibityChecker;
 import fr.imt.mines.ales.component.interfacetype.InterfaceTypeDirectionSubstitualibityChecker;
 import fr.imt.mines.ales.component.parameter.ParameterSubstitualibityChecker;
 import fr.imt.mines.ales.component.signature.SignatureSubstitualibityChecker;
+import fr.imt.mines.ales.structure.manager.DiffManager;
 import fr.imt.mines.ales.utils.DiffObjectJson;
 import fr.imt.mines.ales.utils.FileUtil;
 import fr.imt.mines.ales.utils.JsonWriterSingleton;
@@ -143,6 +144,10 @@ public class ProjectComparator {
 		Comparison comparison = EMFCompare.builder().build().compare(scope);
 
 		diffsList = comparison.getDifferences();
+		
+		DiffManager dm = DiffManager.getInstance();
+		dm.init(diffsList);
+		System.out.println();
 
 		System.out.println("Comparison  OK !");
 

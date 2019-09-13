@@ -26,7 +26,7 @@ public class DiffInterfaceImpl extends AbstractDiffDedal implements DiffInterfac
 	}
 
 	@Override
-	public void setInterfaceType(DiffInterfaceType diffInterfaceType) {
+	public void setDiffInterfaceType(DiffInterfaceType diffInterfaceType) {
 		this.diffInterfaceType = diffInterfaceType;
 	}
 

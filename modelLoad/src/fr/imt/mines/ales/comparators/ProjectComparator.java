@@ -1,6 +1,7 @@
 package fr.imt.mines.ales.comparators;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -145,9 +146,14 @@ public class ProjectComparator {
 
 		diffsList = comparison.getDifferences();
 		
+		try {
 		DiffManager dm = DiffManager.getInstance();
 		dm.init(diffsList);
 		System.out.println();
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println();
+		}
 
 		System.out.println("Comparison  OK !");
 

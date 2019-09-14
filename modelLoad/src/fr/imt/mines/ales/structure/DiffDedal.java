@@ -11,4 +11,5 @@ public interface DiffDedal {
 	public Boolean isSubstitutable();
 	public EObject getDiffObject();
 	String getName();
+	void setDiffObject(EObject diffObject);
 }

@@ -148,7 +148,7 @@ public class ProjectComparator {
 		
 		try {
 		DiffManager dm = DiffManager.getInstance();
-		dm.init(diffsList);
+		dm.init(diffsList,resourceSetOld, resourceSetNew);
 		System.out.println();
 		} catch(Exception e) {
 			e.printStackTrace();

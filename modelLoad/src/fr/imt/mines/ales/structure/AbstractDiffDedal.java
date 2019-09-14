@@ -8,9 +8,11 @@ import org.eclipse.emf.ecore.EObject;
 public abstract class AbstractDiffDedal implements DiffDedal {
 
 	Diff diff;
+	EObject diffObject;
 	
 	public AbstractDiffDedal(Diff diff) {
 		this.diff = diff;
+		this.diffObject = (diff instanceof ReferenceChange)?((ReferenceChange)diff).getValue():null;
 	}
 
 	@Override
@@ -36,8 +38,12 @@ public abstract class AbstractDiffDedal implements DiffDedal {
 	
 	@Override
 	public EObject getDiffObject() {
-		((ReferenceChange)diff).getPrimeRefining();
-		return (diff instanceof ReferenceChange)?((ReferenceChange)diff).getValue():null;
+		return diffObject;
+	}
+	
+	@Override
+	public void setDiffObject(EObject diffObject) {
+		this.diffObject = diffObject;
 	}
 
 }

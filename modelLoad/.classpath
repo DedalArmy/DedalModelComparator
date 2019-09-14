@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="/fr.ema.dedal.metamodel"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JarLoader"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/component-based-architechture-builder"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/type-hierarchy-builder"/>

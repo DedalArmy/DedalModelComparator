@@ -78,7 +78,7 @@ public class Main {
 						rows.get(i+gapVersions)[1],
 						pathToDirectoryForJsonFiles
 						);
-				projectComparator.createDifferences();
+				//projectComparator.createDifferences();
 				i+= gapVersions;
 				gapVersions = 0;
 

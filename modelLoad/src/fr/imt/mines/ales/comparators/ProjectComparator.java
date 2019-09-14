@@ -66,8 +66,6 @@ public class ProjectComparator {
 
 	private Map<Class<?>, CheckerNot4DedalInterface> mapCheckerNot4Interface;
 	private Map<Class<?>, Checker4DedalInterface> mapChecker4Interface;
-
-	private boolean isFirstCall;
 	
 	public ProjectComparator() {
 		DedalPackage.eINSTANCE.eClass();
@@ -79,7 +77,6 @@ public class ProjectComparator {
 		mapCheckerNot4Interface = new HashMap<>();
 		
 		hierarchyBuilderManager  = HierarchyBuilderManager.getInstance();
-		isFirstCall = true;
 	}
 
 	public void loadResources(String pathOldProject, String pathNewProject, String directoryToStoreJsonFiles) throws IOException {
@@ -139,138 +136,138 @@ public class ProjectComparator {
 		System.out.println("Loading resource set OK !");
 	}
 
-	public void createDifferences() {
-		
-		IComparisonScope scope = new DefaultComparisonScope(resourceSetOld, resourceSetNew, null);
-		Comparison comparison = EMFCompare.builder().build().compare(scope);
-
-		diffsList = comparison.getDifferences();
-		
-		try {
-		DiffManager dm = DiffManager.getInstance();
-		dm.init(diffsList,resourceSetOld, resourceSetNew);
-		System.out.println();
-		} catch(Exception e) {
-			e.printStackTrace();
-			System.out.println();
-		}
-
-		System.out.println("Comparison  OK !");
-
-		diffsList.forEach(diff -> {
-
-			if(diff instanceof ReferenceChange ) {
-						
-				if (diff.getKind() == DifferenceKind.ADD) {
-					findDedalTypeOfEObject(diff, diff.getKind());
-				}else if (diff.getKind() == DifferenceKind.CHANGE && diff.getMatch().getRight() != null && diff.getMatch().getLeft() != null) {
-					findDedalTypeOfEObject(diff, diff.getKind());
-				}else if (diff.getKind() == DifferenceKind.DELETE) {
-					findDedalTypeOfEObject(diff, diff.getKind());
-				}else {
-
-				}
-			}
-
-		});
-		System.out.println("Wrinting JSON.....");
-
-		jsonWriterSingleton.writeJson(directoryToStoreJsonFiles + 
-				mapPathsOldProject.get(MapPathKeys.PROJECT_NAME) + "---" + mapPathsNewProject.get(MapPathKeys.PROJECT_NAME) + ".json");
-		
-		System.out.println("Wrinting JSON OK");
-	
-		hierarchyBuilderManager.init();
-	}
-	
-	private void findDedalTypeOfEObject(Diff diff, DifferenceKind differenceKind) {
-		ReferenceChange referenceChange = ((ReferenceChange)diff);
-		EObject eObject = referenceChange.getValue();
-
-		if (eObject instanceof Component) {
-			Component component = (Component)eObject;
-			
-			try {
-				if(component instanceof CompClass) {
-					jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Component.class).check(diff, differenceKind).toJsonObject());
-				}
-					
-				if(component instanceof CompInstance) {
-					jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Component.class).check(diff, differenceKind).toJsonObject());
-	
-				}
-				if(component instanceof CompRole) {
-	
-						jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Component.class).check(diff, differenceKind).toJsonObject());
-				}
-			} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-		
-		if(eObject instanceof Connection) {
-			try {
-				jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Connection.class).check(diff, differenceKind).toJsonObject());
-			} catch (JSONException | ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	
-		if(eObject instanceof Interface) {
-			Interface interfaceObject = (Interface)eObject;
-			try {
-//				DiffObjectJson diffObjectJson = jsonWriterSingleton.addDiffToJsonArray(
-//						mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind)
-//						.toJsonObject());
-				//DiffObjectJson diffObjectJson = mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind);
-				List<DiffObjectJson> listDiffObjectJson = mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind);
-				
-				for(DiffObjectJson diffObjectJson : listDiffObjectJson) {
-					if (diffObjectJson != null) {
-						jsonWriterSingleton.addDiffToJsonArray(diffObjectJson.toJsonObject());
-					}
-				}
-				
-
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		if(eObject instanceof Attribute) {
-			try {
-				jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Attribute.class).check(diff, differenceKind).toJsonObject());
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		if (eObject instanceof Parameter) {
-			try {
-				jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Parameter.class).check(diff, differenceKind).toJsonObject());
-			} catch (JSONException | ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-
-		if(eObject instanceof Signature) {
-			try {
-				jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Signature.class).check(diff, differenceKind).toJsonObject());
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
+//	public void createDifferences() {
+//		
+//		IComparisonScope scope = new DefaultComparisonScope(resourceSetOld, resourceSetNew, null);
+//		Comparison comparison = EMFCompare.builder().build().compare(scope);
+//
+//		diffsList = comparison.getDifferences();
+//		
+//		try {
+//		DiffManager dm = DiffManager.getInstance();
+//		dm.init(diffsList,resourceSetOld, resourceSetNew);
+//		System.out.println();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//			System.out.println();
+//		}
+//
+//		System.out.println("Comparison  OK !");
+//
+//		diffsList.forEach(diff -> {
+//
+//			if(diff instanceof ReferenceChange ) {
+//						
+//				if (diff.getKind() == DifferenceKind.ADD) {
+//					findDedalTypeOfEObject(diff, diff.getKind());
+//				}else if (diff.getKind() == DifferenceKind.CHANGE && diff.getMatch().getRight() != null && diff.getMatch().getLeft() != null) {
+//					findDedalTypeOfEObject(diff, diff.getKind());
+//				}else if (diff.getKind() == DifferenceKind.DELETE) {
+//					findDedalTypeOfEObject(diff, diff.getKind());
+//				}else {
+//
+//				}
+//			}
+//
+//		});
+//		System.out.println("Wrinting JSON.....");
+//
+//		jsonWriterSingleton.writeJson(directoryToStoreJsonFiles + 
+//				mapPathsOldProject.get(MapPathKeys.PROJECT_NAME) + "---" + mapPathsNewProject.get(MapPathKeys.PROJECT_NAME) + ".json");
+//		
+//		System.out.println("Wrinting JSON OK");
+//	
+//		hierarchyBuilderManager.init();
+//	}
+//	
+//	private void findDedalTypeOfEObject(Diff diff, DifferenceKind differenceKind) {
+//		ReferenceChange referenceChange = ((ReferenceChange)diff);
+//		EObject eObject = referenceChange.getValue();
+//
+//		if (eObject instanceof Component) {
+//			Component component = (Component)eObject;
+//			
+//			try {
+//				if(component instanceof CompClass) {
+//					jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Component.class).check(diff, differenceKind).toJsonObject());
+//				}
+//					
+//				if(component instanceof CompInstance) {
+//					jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Component.class).check(diff, differenceKind).toJsonObject());
+//	
+//				}
+//				if(component instanceof CompRole) {
+//	
+//						jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Component.class).check(diff, differenceKind).toJsonObject());
+//				}
+//			} catch (ClassNotFoundException e) {
+//					// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//		}
+//		
+//		if(eObject instanceof Connection) {
+//			try {
+//				jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Connection.class).check(diff, differenceKind).toJsonObject());
+//			} catch (JSONException | ClassNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//	
+//		if(eObject instanceof Interface) {
+//			Interface interfaceObject = (Interface)eObject;
+//			try {
+////				DiffObjectJson diffObjectJson = jsonWriterSingleton.addDiffToJsonArray(
+////						mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind)
+////						.toJsonObject());
+//				//DiffObjectJson diffObjectJson = mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind);
+//				List<DiffObjectJson> listDiffObjectJson = mapChecker4Interface.get(Interface.class).check(diff, interfaceObject.getDirection(), differenceKind);
+//				
+//				for(DiffObjectJson diffObjectJson : listDiffObjectJson) {
+//					if (diffObjectJson != null) {
+//						jsonWriterSingleton.addDiffToJsonArray(diffObjectJson.toJsonObject());
+//					}
+//				}
+//				
+//
+//			} catch (ClassNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		if(eObject instanceof Attribute) {
+//			try {
+//				jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Attribute.class).check(diff, differenceKind).toJsonObject());
+//			} catch (JSONException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (ClassNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		if (eObject instanceof Parameter) {
+//			try {
+//				jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Parameter.class).check(diff, differenceKind).toJsonObject());
+//			} catch (JSONException | ClassNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//
+//		if(eObject instanceof Signature) {
+//			try {
+//				jsonWriterSingleton.addDiffToJsonArray(mapCheckerNot4Interface.get(Signature.class).check(diff, differenceKind).toJsonObject());
+//			} catch (ClassNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+//	}
 	
 	public void initHierarchyBuilder() {
 		hierarchyBuilderManager.init();

@@ -2,14 +2,11 @@ package fr.imt.mines.ales.component.attribute;
 
 import org.eclipse.emf.compare.Diff;
 import org.eclipse.emf.compare.DifferenceKind;
-import org.eclipse.emf.compare.ReferenceChange;
 
 import dedal.Attribute;
-import dedal.Component;
 import fr.imt.ales.redoc.type.hierarchy.build.HierarchyBuilder;
 import fr.imt.ales.redoc.type.hierarchy.structure.JavaType;
 import fr.imt.mines.ales.component.CheckerNot4DedalInterface;
-import fr.imt.mines.ales.utils.DiffObjectJson;
 
 public class AttributeSubstuabilityChecker extends CheckerNot4DedalInterface {
 
@@ -17,31 +14,14 @@ public class AttributeSubstuabilityChecker extends CheckerNot4DedalInterface {
 		super(hierarchyBuilderOld, hierarchyBuilderNew);
 	}
 	
-	public DiffObjectJson check(Diff diffObject, DifferenceKind differenceKind) throws ClassNotFoundException {
-		ReferenceChange referenceChange = (ReferenceChange)diffObject;
-		Attribute attributeObject = (Attribute)referenceChange.getValue();
-		
-		DiffObjectJson diffObjectJson = new DiffObjectJson();
-		diffObjectJson.setDifferenceKind(differenceKind.getName());
-		diffObjectJson.setDedalElementId(attributeObject.toString());
-		diffObjectJson.setDedalType(referenceChange);
-		
-//		if(attributeObject.eContainer() != null && attributeObject.eContainer() instanceof Component) {
-//			diffObjectJson.setParent(((Component)attributeObject.eContainer()).getName());
-//			diffObjectJson.setParentType(attributeObject.eContainer().getClass().getName());
-//		}else {
-//			diffObjectJson.setParent("ERROR PARENT NOT A COMPONENT");
-//		}
-		
+	public Boolean check(Diff diffObject, DifferenceKind differenceKind) throws ClassNotFoundException {
+
 		if(differenceKind == DifferenceKind.DELETE) {
-			diffObjectJson.setSusbstituability(false);
-			diffObjectJson.getViolatedRules().put("A_Delete");
-			return diffObjectJson;
+			return Boolean.FALSE;
 		}
 		
 		if(differenceKind == DifferenceKind.ADD) {
-			diffObjectJson.setSusbstituability(true);
-			return diffObjectJson;
+			return Boolean.TRUE;
 		}
 		
 		if (differenceKind == DifferenceKind.CHANGE) {
@@ -52,15 +32,12 @@ public class AttributeSubstuabilityChecker extends CheckerNot4DedalInterface {
 					((Attribute)diffObject.getMatch().getLeft()).getType());
 
 			if(jTypeParamNewClass.isSubtypeOf(jTypeParamOldClass)) {
-				diffObjectJson.setSusbstituability(true);
+				return Boolean.TRUE;
 			}else if(jTypeParamOldClass.isSubtypeOf(jTypeParamNewClass)){
-				diffObjectJson.setSusbstituability(false);
-				diffObjectJson.getViolatedRules().put("ANew >= AOld");
+				return Boolean.FALSE;
 			}else {
-				diffObjectJson.setSusbstituability(false);
-				diffObjectJson.getViolatedRules().put("ANew || AOld");
+				return Boolean.FALSE;
 			}
-			return diffObjectJson;
 		}
 		return null;
 	}

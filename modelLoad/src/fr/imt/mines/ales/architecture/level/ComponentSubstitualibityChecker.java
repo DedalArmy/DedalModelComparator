@@ -5,49 +5,29 @@ import org.eclipse.emf.compare.DifferenceKind;
 import org.eclipse.emf.compare.ReferenceChange;
 import org.eclipse.emf.ecore.EObject;
 
-import dedal.Assembly;
 import dedal.CompClass;
 import dedal.CompInstance;
 import dedal.CompRole;
 import dedal.Component;
-import dedal.Configuration;
-import dedal.Specification;
 import fr.imt.ales.redoc.type.hierarchy.build.HierarchyBuilder;
 import fr.imt.ales.redoc.type.hierarchy.structure.JavaType;
 import fr.imt.mines.ales.component.CheckerNot4DedalInterface;
-import fr.imt.mines.ales.utils.DiffObjectJson;
 
 public class ComponentSubstitualibityChecker extends CheckerNot4DedalInterface {
 	public ComponentSubstitualibityChecker(HierarchyBuilder hierarchyBuilderOld, HierarchyBuilder hierarchyBuilderNew) {
 		super(hierarchyBuilderOld, hierarchyBuilderNew);
 	}
 	
-	public DiffObjectJson check(Diff diffObject, DifferenceKind differenceKind) {
+	public Boolean check(Diff diffObject, DifferenceKind differenceKind) {
 		
 		ReferenceChange referenceChange = (ReferenceChange)diffObject;
-		Component componentObject = (Component)referenceChange.getValue();
 		
-		DiffObjectJson diffObjectJson = new DiffObjectJson();
-		diffObjectJson.setDifferenceKind(differenceKind.getName());
-		diffObjectJson.setDedalElementId(componentObject.getId());
-		diffObjectJson.setDedalType(referenceChange);
-		
-//		if(componentObject.eContainer() != null && componentObject.eContainer() instanceof Assembly || componentObject.eContainer() instanceof Configuration || componentObject.eContainer() instanceof Specification) {
-//			diffObjectJson.setParent(((Component)componentObject.eContainer()).getName());
-//			diffObjectJson.setParentType(componentObject.eContainer().getClass().getName());
-//		}else {
-//			diffObjectJson.setParent("ERROR PARENT NOT AN ARCHITECTURE DESCRIPTION");
-//		}
-
 		if(differenceKind == DifferenceKind.DELETE) {
-			diffObjectJson.setSusbstituability(false);
-			diffObjectJson.getViolatedRules().put("C_Delete");
-			return diffObjectJson;
+			return Boolean.FALSE;
 		}
 		
 		if(differenceKind == DifferenceKind.ADD) {
-			diffObjectJson.setSusbstituability(true);
-			return diffObjectJson;
+			return Boolean.TRUE;
 		}
 		
 		if (differenceKind == DifferenceKind.CHANGE) {
@@ -92,18 +72,12 @@ public class ComponentSubstitualibityChecker extends CheckerNot4DedalInterface {
 				}
 			
 			if(jTypeParamNewClass.isSubtypeOf(jTypeParamOldClass)) {
-				diffObjectJson.setSusbstituability(true);
+				return Boolean.TRUE;
 			}else if(jTypeParamOldClass.isSubtypeOf(jTypeParamNewClass)){
-				diffObjectJson.setSusbstituability(false);
-				diffObjectJson.getViolatedRules().put("CNew >= COld");
+				return Boolean.FALSE;
 			}else {
-				System.out.println("Compo equals ?????????");
-				System.out.println(diffObject.getRequires().toString());
-				System.out.println("");
-				diffObjectJson.setSusbstituability(false);
-				diffObjectJson.getViolatedRules().put("CNew || COld");
+				return Boolean.FALSE;
 			}
-			return diffObjectJson;
 		}
 
 		return null;

@@ -23,7 +23,9 @@ public class SignatureSubstitualibityChecker extends CheckerNot4DedalInterface{
 			return Boolean.TRUE;
 		}
 		
-		if (differenceKind == DifferenceKind.CHANGE) {
+		if (differenceKind == DifferenceKind.CHANGE && 
+				diffObject.getMatch().getRight() instanceof Signature &&
+				diffObject.getMatch().getLeft() instanceof Signature) {
 			
 			JavaType jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
 					((Signature)diffObject.getMatch().getRight()).getType());

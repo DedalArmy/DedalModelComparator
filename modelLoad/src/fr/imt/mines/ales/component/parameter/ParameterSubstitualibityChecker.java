@@ -23,7 +23,9 @@ public class ParameterSubstitualibityChecker extends CheckerNot4DedalInterface{
 			return Boolean.FALSE;
 		}
 		
-		if (differenceKind == DifferenceKind.CHANGE) {
+		if (differenceKind == DifferenceKind.CHANGE &&
+				diffObject.getMatch().getRight() instanceof Parameter && 
+				diffObject.getMatch().getLeft() instanceof Parameter) {
 
 			JavaType jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
 					((Parameter)diffObject.getMatch().getRight()).getType());

@@ -16,7 +16,9 @@ public class InterfaceTypeDirectionSubstitualibityChecker extends Checker4DedalI
 	
 	public Boolean check(Diff diffObject, DIRECTION direction, DifferenceKind differenceKind) {
 		
-		if (differenceKind == DifferenceKind.CHANGE) {
+		if (differenceKind == DifferenceKind.CHANGE && 
+				diffObject.getMatch().getRight() instanceof InterfaceType &&
+				diffObject.getMatch().getLeft() instanceof InterfaceType) {
 
 			JavaType jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
 					((InterfaceType)diffObject.getMatch().getRight()).getName());

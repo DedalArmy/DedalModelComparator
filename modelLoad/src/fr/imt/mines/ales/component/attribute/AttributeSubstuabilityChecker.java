@@ -24,7 +24,9 @@ public class AttributeSubstuabilityChecker extends CheckerNot4DedalInterface {
 			return Boolean.TRUE;
 		}
 		
-		if (differenceKind == DifferenceKind.CHANGE) {
+		if (differenceKind == DifferenceKind.CHANGE && 
+				diffObject.getMatch().getRight() instanceof Attribute &&
+				diffObject.getMatch().getLeft() instanceof Attribute) {
 
 			JavaType jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
 					((Attribute)diffObject.getMatch().getRight()).getType());

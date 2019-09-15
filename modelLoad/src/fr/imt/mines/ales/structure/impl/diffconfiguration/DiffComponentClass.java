@@ -6,6 +6,7 @@ import java.util.Set;
 import org.eclipse.emf.compare.Diff;
 
 import dedal.CompClass;
+import fr.imt.mines.ales.comparators.ProjectComparator;
 import fr.imt.mines.ales.structure.AbstractDiffComponent;
 import fr.imt.mines.ales.structure.DiffAttribute;
 
@@ -53,6 +54,17 @@ public class DiffComponentClass extends AbstractDiffComponent {
 	
 	public Boolean containsDiffAttribute(String name) {
 		return (this.getDiffAttribute(name)!=null)?Boolean.TRUE:Boolean.FALSE;
+	}
+	
+	@Override
+	public Boolean checkGlobalSubstitutability(ProjectComparator pc) {
+		for(DiffAttribute da : this.diffAttributes) {
+			if(Boolean.FALSE.equals(da.checkGlobalSubstitutability(pc))) {
+				System.out.println(da + " --> " + da.checkGlobalSubstitutability(pc));
+				return Boolean.FALSE;
+			}
+		}
+		return super.checkGlobalSubstitutability(pc);
 	}
 	
 }

@@ -3,6 +3,7 @@ package fr.imt.mines.ales.structure.impl;
 import org.eclipse.emf.compare.Diff;
 
 import dedal.Interface;
+import fr.imt.mines.ales.comparators.ProjectComparator;
 import fr.imt.mines.ales.structure.AbstractDiffDedal;
 import fr.imt.mines.ales.structure.DiffInterface;
 import fr.imt.mines.ales.structure.DiffInterfaceType;
@@ -33,6 +34,15 @@ public class DiffInterfaceImpl extends AbstractDiffDedal implements DiffInterfac
 	@Override
 	public DiffInterfaceType getInterfaceType() {
 		return this.diffInterfaceType;
+	}
+
+	@Override
+	public Boolean checkGlobalSubstitutability(ProjectComparator pc) {
+		if(diffInterfaceType != null && Boolean.FALSE.equals(diffInterfaceType.checkGlobalSubstitutability(pc))) {
+			System.out.println(diffInterfaceType + " --> " + diffInterfaceType.checkGlobalSubstitutability(pc));
+			return Boolean.FALSE;
+		}
+		return this.isSubstitutable(pc);
 	}
 
 }

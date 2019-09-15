@@ -5,10 +5,13 @@ import org.eclipse.emf.compare.DifferenceKind;
 import org.eclipse.emf.compare.ReferenceChange;
 import org.eclipse.emf.ecore.EObject;
 
+import fr.imt.mines.ales.comparators.ProjectComparator;
+
 public abstract class AbstractDiffDedal implements DiffDedal {
 
 	Diff diff;
 	EObject diffObject;
+	Boolean substitutability = null;
 	
 	public AbstractDiffDedal(Diff diff) {
 		this.diff = diff;
@@ -31,9 +34,10 @@ public abstract class AbstractDiffDedal implements DiffDedal {
 	}
 
 	@Override
-	public Boolean isSubstitutable() {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean isSubstitutable(ProjectComparator pc) {
+		if(this.diff!=null && this.substitutability == null)
+			this.substitutability = pc.checkSubstitutability(this);
+		return this.substitutability;
 	}
 	
 	@Override

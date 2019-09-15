@@ -23,16 +23,32 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.json.JSONException;
 
 import dedal.Attribute;
+import dedal.ClassConnection;
 import dedal.CompClass;
 import dedal.CompInstance;
 import dedal.CompRole;
+import dedal.CompType;
 import dedal.Component;
 import dedal.Connection;
 import dedal.DedalPackage;
+import dedal.InstConnection;
 import dedal.Interface;
 import dedal.InterfaceType;
 import dedal.Parameter;
+import dedal.RoleConnection;
 import dedal.Signature;
+import dedal.impl.AttributeImpl;
+import dedal.impl.ClassConnectionImpl;
+import dedal.impl.CompClassImpl;
+import dedal.impl.CompInstanceImpl;
+import dedal.impl.CompRoleImpl;
+import dedal.impl.CompTypeImpl;
+import dedal.impl.ComponentImpl;
+import dedal.impl.InstConnectionImpl;
+import dedal.impl.InterfaceImpl;
+import dedal.impl.ParameterImpl;
+import dedal.impl.RoleConnectionImpl;
+import dedal.impl.SignatureImpl;
 import fr.imt.ales.redoc.type.hierarchy.build.HierarchyBuilder;
 import fr.imt.ales.redoc.type.hierarchy.build.HierarchyBuilderManager;
 import fr.imt.mines.ales.architecture.level.ComponentSubstitualibityChecker;
@@ -44,6 +60,7 @@ import fr.imt.mines.ales.component.cinterface.InterfaceSubstitualibityChecker;
 import fr.imt.mines.ales.component.interfacetype.InterfaceTypeDirectionSubstitualibityChecker;
 import fr.imt.mines.ales.component.parameter.ParameterSubstitualibityChecker;
 import fr.imt.mines.ales.component.signature.SignatureSubstitualibityChecker;
+import fr.imt.mines.ales.structure.DiffDedal;
 import fr.imt.mines.ales.structure.manager.DiffManager;
 import fr.imt.mines.ales.utils.DiffObjectJson;
 import fr.imt.mines.ales.utils.FileUtil;
@@ -109,12 +126,31 @@ public class ProjectComparator {
 		
 		//------------ Maps with checkers ------------
 		mapCheckerNot4Interface.put(Signature.class, new SignatureSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(SignatureImpl.class, new SignatureSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		mapCheckerNot4Interface.put(Parameter.class, new ParameterSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(ParameterImpl.class, new ParameterSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		mapCheckerNot4Interface.put(Attribute.class, new AttributeSubstuabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(AttributeImpl.class, new AttributeSubstuabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		mapCheckerNot4Interface.put(Component.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(ComponentImpl.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(CompInstance.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(CompInstanceImpl.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));;
+		mapCheckerNot4Interface.put(CompClass.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(CompClassImpl.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));;
+		mapCheckerNot4Interface.put(CompType.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(CompTypeImpl.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(CompRole.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(CompRoleImpl.class, new ComponentSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		mapCheckerNot4Interface.put(Connection.class, new ConnectionSubstituabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
-		
+		mapCheckerNot4Interface.put(InstConnection.class, new ConnectionSubstituabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(InstConnectionImpl.class, new ConnectionSubstituabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(ClassConnection.class, new ConnectionSubstituabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(ClassConnectionImpl.class, new ConnectionSubstituabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(RoleConnection.class, new ConnectionSubstituabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapCheckerNot4Interface.put(RoleConnectionImpl.class, new ConnectionSubstituabilityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+
 		mapChecker4Interface.put(Interface.class, new InterfaceSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
+		mapChecker4Interface.put(InterfaceImpl.class, new InterfaceSubstitualibityChecker(hierarchyBuilderOld, hierarchyBuilderNew));
 		//---------------------------------------------
 		
 		System.out.println("Loading hierarchy builders OK");
@@ -135,6 +171,47 @@ public class ProjectComparator {
 
 		System.out.println("Loading resource set OK !");
 	}
+	
+	public EList<Diff> getDiffsList() {
+		return diffsList;
+	}
+	
+	public ResourceSet getResourceSetOld() {
+		return resourceSetOld;
+	}
+	
+	public ResourceSet getResourceSetNew() {
+		return resourceSetNew;
+	}
+	
+	public void createDifferences() {
+		IComparisonScope scope = new DefaultComparisonScope(resourceSetOld, resourceSetNew, null);
+		Comparison comparison = EMFCompare.builder().build().compare(scope);
+
+		diffsList = comparison.getDifferences();
+
+		System.out.println("Comparison  OK !");
+	}
+	
+	public Boolean checkSubstitutability(DiffDedal diffDedal) {
+		try {
+			if(diffDedal.getDiffObject() instanceof Interface) {
+				return this.mapChecker4Interface.get(diffDedal.getDiffObject().getClass()).check(diffDedal.getDiff(), 
+						((Interface)diffDedal.getDiffObject()).getDirection(), diffDedal.getDiffKind());
+			} else {
+				//System.out.println(diffDedal.getDiffObject().getClass());
+				if(!(diffDedal.getDiffObject() instanceof InterfaceType))
+					return this.mapCheckerNot4Interface.get(diffDedal.getDiffObject().getClass()).check(diffDedal.getDiff(), 
+							diffDedal.getDiffKind());
+				else
+					return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println();
+		}
+		return Boolean.FALSE;
+	}
 
 //	public void createDifferences() {
 //		
@@ -143,14 +220,6 @@ public class ProjectComparator {
 //
 //		diffsList = comparison.getDifferences();
 //		
-//		try {
-//		DiffManager dm = DiffManager.getInstance();
-//		dm.init(diffsList,resourceSetOld, resourceSetNew);
-//		System.out.println();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//			System.out.println();
-//		}
 //
 //		System.out.println("Comparison  OK !");
 //

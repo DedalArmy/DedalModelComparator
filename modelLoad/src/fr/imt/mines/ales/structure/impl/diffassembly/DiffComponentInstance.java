@@ -3,6 +3,7 @@ package fr.imt.mines.ales.structure.impl.diffassembly;
 import org.eclipse.emf.compare.Diff;
 
 import dedal.CompInstance;
+import fr.imt.mines.ales.comparators.ProjectComparator;
 import fr.imt.mines.ales.structure.AbstractDiffComponent;
 
 public class DiffComponentInstance extends AbstractDiffComponent{

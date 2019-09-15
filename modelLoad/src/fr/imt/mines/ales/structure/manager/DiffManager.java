@@ -10,8 +10,6 @@ import org.eclipse.emf.compare.ReferenceChange;
 import org.eclipse.emf.compare.ResourceAttachmentChange;
 import org.eclipse.emf.compare.ResourceLocationChange;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-
 import dedal.ArchitectureDescription;
 import dedal.Assembly;
 import dedal.Attribute;
@@ -33,6 +31,7 @@ import dedal.Parameter;
 import dedal.RoleConnection;
 import dedal.Signature;
 import dedal.Specification;
+import fr.imt.mines.ales.comparators.ProjectComparator;
 import fr.imt.mines.ales.structure.DiffArchitectureLevel;
 import fr.imt.mines.ales.structure.DiffAttribute;
 import fr.imt.mines.ales.structure.DiffComponent;
@@ -77,6 +76,7 @@ public class DiffManager {
 
 	private DedalDiagram oldDiagram;	
 	private DedalDiagram newDiagram;
+	private ProjectComparator projectComparator;
 
 	private DiffManager() {}
 
@@ -87,7 +87,7 @@ public class DiffManager {
 		return INSTANCE;
 	}
 
-	public void init(List<Diff> diffs, ResourceSet resourceSetOld, ResourceSet resourceSetNew) {
+	public void init(ProjectComparator projectComparator) {
 		this.diffArchitectureLevels = new ArrayList<>();
 		this.diffComponents = new ArrayList<>();
 		this.diffInterfaceTypes = new ArrayList<>();
@@ -98,11 +98,13 @@ public class DiffManager {
 		this.diffDedals = new ArrayList<>();
 		this.diffAttributes = new ArrayList<>();
 
-		this.oldDiagram = (DedalDiagram) resourceSetOld.getResources().get(0).getContents().get(0);
-		this.newDiagram = (DedalDiagram) resourceSetNew.getResources().get(0).getContents().get(0);
+		this.oldDiagram = (DedalDiagram) projectComparator.getResourceSetOld().getResources().get(0).getContents().get(0);
+		this.newDiagram = (DedalDiagram) projectComparator.getResourceSetNew().getResources().get(0).getContents().get(0);
+		
+		this.projectComparator = projectComparator;
 
-		System.out.println("diffs size : " + diffs.size());
-		this.fillSets(diffs);
+		System.out.println("diffs size : " + projectComparator.getDiffsList().size());
+		this.fillSets(projectComparator.getDiffsList());
 		System.out.println("-------------------------------------------------");
 		System.out.println("-------------------------------------------------");
 		this.printSetSizes();
@@ -1008,5 +1010,34 @@ public class DiffManager {
 			}
 		}
 		return null;
+	}
+
+	public void checkSubstitutability() {
+//		for(DiffArchitectureLevel diffAL : this.diffArchitectureLevels) {
+//			
+//		}
+		
+		for(DiffDedal dd : this.diffArchitectureLevels) {
+			Boolean substitutable = dd.checkGlobalSubstitutability(this.projectComparator);
+			if(Boolean.TRUE.equals(substitutable)) {
+				System.out.println(dd.getDiffObject() + "============= > SUBSTITUTABLE");
+			} else if(Boolean.FALSE.equals(substitutable)) {
+				System.out.println(dd.getDiffObject() + "============= > NOT SUBSTITUTABLE");
+			} else if(substitutable == null) {
+				System.out.println(dd.getDiffObject() + "============= > NOT DETERMINED YET");
+			}
+		}
+		
+	}
+	
+	public String export(String old, String new_) {
+		StringBuilder stb = new StringBuilder();
+		
+		stb.append("old;new;obj;subst\n");
+		for(DiffDedal dd : this.diffDedals) {
+			stb.append(old + ";" + new_ + ";" + dd.getDiffObject() + ";" + dd.checkGlobalSubstitutability(this.projectComparator) + "\n");
+		}
+		
+		return stb.toString();
 	}
 }

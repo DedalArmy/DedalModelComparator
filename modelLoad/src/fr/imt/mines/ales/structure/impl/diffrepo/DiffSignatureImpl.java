@@ -6,6 +6,7 @@ import java.util.Set;
 import org.eclipse.emf.compare.Diff;
 
 import dedal.Signature;
+import fr.imt.mines.ales.comparators.ProjectComparator;
 import fr.imt.mines.ales.structure.AbstractDiffDedal;
 import fr.imt.mines.ales.structure.DiffParameter;
 import fr.imt.mines.ales.structure.DiffSignature;
@@ -63,6 +64,17 @@ public class DiffSignatureImpl extends AbstractDiffDedal implements DiffSignatur
 	@Override
 	public String getName() {
 		return (this.getDiffObject() instanceof Signature)?((Signature)this.getDiffObject()).getName():null;
+	}
+
+	@Override
+	public Boolean checkGlobalSubstitutability(ProjectComparator pc) {
+		for(DiffParameter dp : this.diffParameters) {
+			if(Boolean.FALSE.equals(dp.checkGlobalSubstitutability(pc)))
+				return Boolean.FALSE;
+//			if(dp.checkGlobalSubstitutability(pc) == null)
+//				return null;
+		}
+		return this.isSubstitutable(pc);
 	}
 
 }

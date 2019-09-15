@@ -6,6 +6,7 @@ import java.util.Set;
 import org.eclipse.emf.compare.Diff;
 
 import dedal.ArchitectureDescription;
+import fr.imt.mines.ales.comparators.ProjectComparator;
 
 public abstract class AbstractDiffArchitectureLevel extends AbstractDiffDedal implements DiffArchitectureLevel {
 
@@ -80,6 +81,26 @@ public abstract class AbstractDiffArchitectureLevel extends AbstractDiffDedal im
 	@Override
 	public String getName() {
 		return (this.getDiffObject() instanceof ArchitectureDescription)?((ArchitectureDescription) this.getDiffObject()).getName():null;
+	}
+	
+	@Override
+	public Boolean checkGlobalSubstitutability(ProjectComparator pc) {
+		try {
+		for(DiffComponent dc : this.diffComponents) {
+			if(Boolean.FALSE.equals(dc.checkGlobalSubstitutability(pc))) {
+				System.out.println(dc + " --> " + dc.checkGlobalSubstitutability(pc));
+				return Boolean.FALSE;
+			}
+		}
+		for(DiffConnection dc : this.diffConnections) {
+			if(Boolean.FALSE.equals(dc.checkGlobalSubstitutability(pc)))
+				return Boolean.FALSE;
+		}
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println();
+		}
+		return Boolean.TRUE;
 	}
 
 }

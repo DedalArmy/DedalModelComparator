@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.eclipse.emf.compare.Diff;
 
+import fr.imt.mines.ales.comparators.ProjectComparator;
+
 public abstract class AbstractDiffComponent extends AbstractDiffDedal implements DiffComponent {
 
 	private Set<DiffInterface> diffInterfaces;
@@ -50,6 +52,17 @@ public abstract class AbstractDiffComponent extends AbstractDiffDedal implements
 	@Override
 	public Boolean containsDiffInterface(String name) {
 		return (this.getDiffInterface(name) != null)?Boolean.TRUE:Boolean.FALSE;
+	}
+	
+	@Override
+	public Boolean checkGlobalSubstitutability(ProjectComparator pc) {
+		for(DiffInterface di : this.getDiffInterfaces()) {
+			if(Boolean.FALSE.equals(di.checkGlobalSubstitutability(pc))) {
+				System.out.println(di + " --> " + di.checkGlobalSubstitutability(pc));
+				return Boolean.FALSE;
+			}
+		}
+		return this.isSubstitutable(pc);
 	}
 
 }

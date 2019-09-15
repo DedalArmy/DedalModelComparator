@@ -17,67 +17,67 @@ public class ComponentSubstitualibityChecker extends CheckerNot4DedalInterface {
 	public ComponentSubstitualibityChecker(HierarchyBuilder hierarchyBuilderOld, HierarchyBuilder hierarchyBuilderNew) {
 		super(hierarchyBuilderOld, hierarchyBuilderNew);
 	}
-	
+
 	public Boolean check(Diff diffObject, DifferenceKind differenceKind) {
-		
+
 		ReferenceChange referenceChange = (ReferenceChange)diffObject;
-		
+
 		if(differenceKind == DifferenceKind.DELETE) {
 			return Boolean.FALSE;
 		}
-		
+
 		if(differenceKind == DifferenceKind.ADD) {
 			return Boolean.TRUE;
 		}
-		
-		if (differenceKind == DifferenceKind.CHANGE) {
+
+		if (differenceKind == DifferenceKind.CHANGE && 
+				((referenceChange.getValue() instanceof CompInstance)||
+						(referenceChange.getValue() instanceof CompRole)||
+						(referenceChange.getValue() instanceof CompClass))) {
 
 			JavaType jTypeParamNewClass = null;
 			JavaType jTypeParamOldClass = null;
-		
-				EObject eObjectRight = diffObject.getMatch().getRight();
-				EObject eObjectLeft = diffObject.getMatch().getLeft();
 
-				Component compoR = ((Component)eObjectRight);
-				Component compoL = ((Component)eObjectLeft);
-				
-				String compoRName = "";
-				String compoLName = "";
-				
-				if(compoR instanceof CompInstance && compoL instanceof CompInstance) {
-					compoLName = ((CompInstance)compoL).getInstantiates().getName();
-					compoRName = ((CompInstance)compoR).getInstantiates().getName();
-					
-					jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
-							compoRName);
-					jTypeParamOldClass = getHierarchyBuilderOld().findJavaType(
-							compoLName);
-				}
-				
-				if(compoR instanceof CompClass && compoL instanceof CompClass) {
-					compoLName = ((CompClass)compoL).getName();
-					compoRName = ((CompClass)compoR).getName();
-					
-					jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
-							compoRName);
-					jTypeParamOldClass = getHierarchyBuilderOld().findJavaType(
-							compoLName);
-				}
-				
-				if(compoR instanceof CompRole && compoL instanceof CompRole) {
-					jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
-							((CompClass)compoR).getName().split("_role")[0]);
-					jTypeParamOldClass = getHierarchyBuilderOld().findJavaType(
-							((CompClass)compoL).getName().split("_role")[0]);
-				}
-			
-			if(jTypeParamNewClass.isSubtypeOf(jTypeParamOldClass)) {
+			EObject eObjectRight = diffObject.getMatch().getRight();
+			EObject eObjectLeft = diffObject.getMatch().getLeft();
+
+			String compoRName = "";
+			String compoLName = "";
+
+			if(eObjectRight instanceof CompInstance && eObjectLeft instanceof CompInstance) {
+				compoLName = ((CompInstance)eObjectLeft).getInstantiates().getName();
+				compoRName = ((CompInstance)eObjectRight).getInstantiates().getName();
+
+				jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
+						compoRName);
+				jTypeParamOldClass = getHierarchyBuilderOld().findJavaType(
+						compoLName);
+			}
+
+			if(eObjectRight instanceof CompClass && eObjectLeft instanceof CompClass) {
+				compoLName = ((CompClass)eObjectLeft).getName();
+				compoRName = ((CompClass)eObjectRight).getName();
+
+				jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
+						compoRName);
+				jTypeParamOldClass = getHierarchyBuilderOld().findJavaType(
+						compoLName);
+			}
+
+			if(eObjectRight instanceof CompRole && eObjectLeft instanceof CompRole) {
+				jTypeParamNewClass = getHierarchyBuilderNew().findJavaType(
+						((CompClass)eObjectRight).getName().split("_role")[0]);
+				jTypeParamOldClass = getHierarchyBuilderOld().findJavaType(
+						((CompClass)eObjectLeft).getName().split("_role")[0]);
+			}
+
+			if(jTypeParamNewClass != null && jTypeParamOldClass != null && jTypeParamNewClass.isSubtypeOf(jTypeParamOldClass)) {
 				return Boolean.TRUE;
-			}else if(jTypeParamOldClass.isSubtypeOf(jTypeParamNewClass)){
-				return Boolean.FALSE;
-			}else {
+			}
+			if(jTypeParamNewClass != null && jTypeParamOldClass != null && jTypeParamOldClass.isSubtypeOf(jTypeParamNewClass)){
 				return Boolean.FALSE;
 			}
+			return null;
 		}
 
 		return null;

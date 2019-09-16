@@ -7,20 +7,12 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/MrAleborg/.m2/repository/com/github/javaparser/javaparser-symbol-solver-core/3.10.1/javaparser-symbol-solver-core-3.10.1.jar">
-		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
-			<attribute name="maven.groupId" value="com.github.javaparser"/>
-			<attribute name="maven.artifactId" value="javaparser-symbol-solver-core"/>
-			<attribute name="maven.version" value="3.10.1"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="java-symbol-solver-core-0.6.3.jar"/>
 	<classpathentry kind="lib" path="javaparser-core-3.10.1.jar"/>
 	<classpathentry kind="lib" path="json-20190722.jar"/>
 	<classpathentry kind="lib" path="log4j-api-2.12.1.jar"/>
 	<classpathentry kind="lib" path="log4j-core-2.12.1.jar"/>
+	<classpathentry kind="lib" path="javaparser-symbol-solver-core-3.10.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/JarLoader"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/type-hierarchy-builder"/>
 	<classpathentry kind="output" path="bin"/>

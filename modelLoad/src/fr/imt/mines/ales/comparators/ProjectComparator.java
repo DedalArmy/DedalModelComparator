@@ -94,6 +94,7 @@ public class ProjectComparator {
 		mapCheckerNot4Interface = new HashMap<>();
 		
 		hierarchyBuilderManager  = HierarchyBuilderManager.getInstance();
+		hierarchyBuilderManager.init();
 	}
 
 	public void loadResources(String pathOldProject, String pathNewProject, String directoryToStoreJsonFiles) throws IOException {

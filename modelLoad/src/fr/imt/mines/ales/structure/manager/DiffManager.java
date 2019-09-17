@@ -1033,7 +1033,7 @@ public class DiffManager {
 	public String export(String old, String new_) {
 		StringBuilder stb = new StringBuilder();
 		
-		stb.append("old;new;obj;subst\n");
+		stb.append("old;new;obj;diff_kind;subst\n");
 		for(DiffDedal dd : this.diffDedals) {
 			stb.append(old + ";" + new_ + ";" + dd.getDiffObject().getClass() + " " + dd.getName() + ";" + dd.getDiffKind() + ";" + dd.checkGlobalSubstitutability(this.projectComparator) + "\n");
 		}

@@ -30,7 +30,7 @@ public abstract class AbstractDiffDedal implements DiffDedal {
 
 	@Override
 	public DifferenceKind getDiffKind() {
-		return this.diff.getKind();
+		return this.diff!=null?this.diff.getKind():null;
 	}
 
 	@Override

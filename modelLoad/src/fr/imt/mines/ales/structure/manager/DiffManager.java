@@ -1035,7 +1035,7 @@ public class DiffManager {
 		
 		stb.append("old;new;obj;subst\n");
 		for(DiffDedal dd : this.diffDedals) {
-			stb.append(old + ";" + new_ + ";" + dd.getDiffObject().getClass() + " " + dd.getName() + ";" + dd.checkGlobalSubstitutability(this.projectComparator) + "\n");
+			stb.append(old + ";" + new_ + ";" + dd.getDiffObject().getClass() + " " + dd.getName() + ";" + dd.getDiffKind() + ";" + dd.checkGlobalSubstitutability(this.projectComparator) + "\n");
 		}
 		
 		return stb.toString();
